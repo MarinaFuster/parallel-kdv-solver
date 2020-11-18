@@ -3,8 +3,9 @@ clc
 order = 4; % we will change this to get metrics
 
 N = 256;
-x = linspace(-10,10,N);        % domain
+x = linspace(-10,10,N);        % domain, is this ok?
 tmax =  1.5;
+t=0;
 
 %TEST PROBLEM
 c_1=13;
@@ -22,4 +23,10 @@ drawnow
 
 parallel = false; % TODO when using parallel true computer crashes, fix this
 
-Approximate(u, x N, tmax, order, parallel);
+Approximate(u, x, N, tmax, order, parallel);
+
+
+% in main you define the equation you want to aproximate and its initial
+% conditions
+% Here you call Approximate -> MethodStep (for each iteration) ->
+% LieTrotter
