@@ -7,18 +7,17 @@ x = linspace(-10,10,N);        % domain, is this ok?
 tmax =  1.5;
 t=0;
 
-%TEST PROBLEM
-c_1=13;
-c_2 =3;
-u = 1/2*c_1*(sech(sqrt(c_1)*(x+8)/2)).^2 + 1/2*c_2*(sech(sqrt(c_2)*(x+1)/2)).^2;
-%FINISHES TEST PROBLEM
+% Initial conditions
+A=25;
+B =16;
+u = 3.*(A.^2).*(sech(A.*(x+2)./2).^2) + 3.*(B.^2).*(sech(B.*(x+1)./2).^2);
 
 % Plots initial condition (we want to get a better idea of what we are dealing with)
-plot(x,u,'LineWidth',2)
-axis([-10 10 0 10])
+plot(x,u,'LineWidth',1)
+axis([-10 10 0 2100])
 xlabel('x')
 ylabel('u')
-text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize',14)
+text(6,2000,['t = ',num2str(t,'%1.2f')],'FontSize',14)
 drawnow
 
 parallel = false; % TODO when using parallel true computer crashes, fix this
