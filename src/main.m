@@ -1,6 +1,9 @@
 clc
 
-order = 4; % we will change this to get metrics
+fileID = fopen('metrics.txt','w');
+fprintf(fileID,'%s\t%s\t%s\t%s\n','time','order', 'parallel', 'delta_t');
+
+orders = [2, 4, 6];
 
 N = 256;
 x = linspace(-10,10,N);        % domain, is this ok?
@@ -20,11 +23,21 @@ ylabel('u')
 text(6,2000,['t = ',num2str(t,'%1.2f')],'FontSize',14)
 drawnow
 
-parallel = true; % TODO when using parallel true computer crashes, fix this
+% METRICS
+for i=1:length(orders)
+    parallel = true; % TODO when using parallel true computer crashes, fix this
+    f = @() Approximate(u, x, N, tmax, orders(i), parallel);
+    time = timeit(f, 0);
+    fprintf(fileID,'%E\t%d\t%s\n',time, orders(i), string(parallel));
+    
+    parallel = false;
+    f = @() Approximate(u, x, N, tmax, orders(i), parallel);
+    time = timeit(f, 0);
+    fprintf(fileID,'%E\t%d\t%s\n',time, orders(i), string(parallel));
+end
 
-Approximate(u, x, N, tmax, order, parallel);
 
-
+fclose(fileID);
 % in main you define the equation you want to aproximate and its initial
 % conditions
 % Here you call Approximate -> MethodStep (for each iteration) ->
