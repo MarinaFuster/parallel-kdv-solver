@@ -21,7 +21,7 @@ ylabel('u')
 text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize',14)
 drawnow
 
-parallel = false; % TODO when using parallel true computer crashes, fix this
+parallel = true; % TODO when using parallel true computer crashes, fix this
 
 Approximate(u, x, N, tmax, order, parallel);
 
