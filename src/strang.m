@@ -2,6 +2,7 @@ clear all
 clc
 
 [xmin,xmax,ymin,ymax] = deal(-10, 10, 0, 10);
+label_size = 14;
 
 N = 256;
 x = linspace(xmin,xmax,N); % generate X axis
@@ -21,9 +22,9 @@ t=0;
 %% Draw the initial diagram
 plot(x,u,'LineWidth',2)
 axis([xmin xmax ymin ymax])
-xlabel('x')
-ylabel('u')
-text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize',14)
+xlabel('x','FontSize',label_size)
+ylabel('u','FontSize',label_size)
+text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize',label_size )
 drawnow
 
 tmax = 1.5;
@@ -49,9 +50,9 @@ for n = 1:nmax
         if mod(n,4*t_plot) == 0
             plot(x,u,'LineWidth',2)
             axis([xmin xmax ymin ymax])
-            xlabel('x')
-            ylabel('u')
-            text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize',10)
+            xlabel('x', 'FontSize',label_size)
+            ylabel('u', 'FontSize',label_size)
+            text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize', label_size)
             drawnow
         end
     end
