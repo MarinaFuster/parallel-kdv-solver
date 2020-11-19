@@ -25,15 +25,18 @@ drawnow
 
 % METRICS
 for i=1:length(orders)
-    parallel = true;
-    f = @() Approximate(u, x, N, tmax, orders(i), parallel);
-    time = timeit(f, 0);
-    fprintf(fileID,'%E\t%d\t%s\n',time, orders(i), string(parallel));
-    
     parallel = false;
-    f = @() Approximate(u, x, N, tmax, orders(i), parallel);
-    time = timeit(f, 0);
-    fprintf(fileID,'%E\t%d\t%s\n',time, orders(i), string(parallel));
+    tic;
+    Approximate(u, x, N, tmax, orders(i), parallel);
+    t_series = toc;
+    
+    fprintf(fileID,'%E\t%d\t%s\n', t_series, orders(i), string(parallel));
+    
+    parallel = true;
+    tic;
+    Approximate(u, x, N, tmax, orders(i), parallel);
+    t_parallel = toc;
+    fprintf(fileID,'%E\t%d\t%s\n', t_parallel, orders(i), string(parallel));
 end
 
 
