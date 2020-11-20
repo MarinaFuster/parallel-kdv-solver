@@ -1,11 +1,11 @@
-function [] = Approximate(u, x, N, tmax, order, parallel)
+function [] = Approximate(u, x, N, tmax, order, parallel, delta_t)
     % clc
     % set(gca,'FontSize',8)
     % set(gca,'LineWidth',2)
 
     delta_x = x(2) - x(1);         % x step
     delta_k = 2*pi/(N*delta_x);
-    delta_t = 0.0005;
+    %delta_t = 0.0005;
 
     k = [0:delta_k:(N/2-1)*delta_k,0,-(N/2-1)*delta_k:delta_k:-delta_k];
     plot_iteration = floor((tmax/100)/delta_t);
