@@ -37,5 +37,5 @@ for i=1:length(orders)
         % fprintf(fileID_errors,'%d\t%f\t%f\n', orders(i), delta_t, error{j});
     end
     total_error=cellfun(@(x)norm(x,Inf), error);
-    fprintf(fileID_errors,'%d\t%f\t%s\t%f\n', orders(i), delta_t, "TOTAL ERROR", total_error);
+    fprintf(fileID_errors,'%d\t%f\t%f\n', orders(i), delta_t, total_error);
 end
