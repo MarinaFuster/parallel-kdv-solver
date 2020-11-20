@@ -31,20 +31,18 @@ ylabel('u')
 text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize',10)
 drawnow
 
-
-
 % METRICS OR NORMAL MODE
 if(runMetrics)
     fileID = fopen('metrics.txt','w');
-    fprintf(fileID,'%s\t%s\t%s\t%s\t%s\n','repetition','time','order', 'parallel', 'delta_t');
+    fprintf(fileID,'%s\t%s\t%s\t%s\t%s\t%s\n','repetition','time','order', 'parallel', 'delta_t');
     for rep=1:repetitions
         parallel = false;
+        prev_result = [u, u, u];
         for i=1:length(orders)
            for j=1:length(delta_ts)
                 tic;
-                Approximate(u, x, N, tmax, orders(i), parallel, delta_ts(j));
+                results = Approximate(u, x, N, tmax, orders(i), parallel, delta_ts(j));
                 t_series = toc;
-
                 fprintf(fileID,'%d\t%E\t%d\t%s\t%f\n', rep, t_series, orders(i), string(parallel), delta_ts(j));
            end
         end
@@ -54,10 +52,11 @@ if(runMetrics)
     % only once
     for rep=1:repetitions
         parallel = true;
+        prev_result = [u, u, u];
         for i=1:length(orders)
             for j=1:length(delta_ts)
                 tic;
-                Approximate(u, x, N, tmax, orders(i), parallel, delta_ts(j));
+                result = Approximate(u, x, N, tmax, orders(i), parallel, delta_ts(j));
                 t_parallel = toc;
                 fprintf(fileID,'%d\t%t\t%d\t%s\t%f\n', rep, t_parallel, orders(i), string(parallel), delta_ts(j));
             end

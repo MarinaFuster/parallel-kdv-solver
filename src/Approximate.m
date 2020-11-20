@@ -1,4 +1,4 @@
-function [] = Approximate(u, x, N, tmax, order, parallel, delta_t)
+function results = Approximate(u, x, N, tmax, order, parallel, delta_t)
     % clc
     % set(gca,'FontSize',8)
     % set(gca,'LineWidth',2)
@@ -20,6 +20,7 @@ function [] = Approximate(u, x, N, tmax, order, parallel, delta_t)
 
         U = MethodStep(U, k, delta_t, order, parallel);
         % Method step completed
+        results{n}=U;
 
         if mod(n,plot_iteration) == 0
             u = real(ifft(U));
@@ -31,4 +32,5 @@ function [] = Approximate(u, x, N, tmax, order, parallel, delta_t)
             drawnow
         end
     end
+   
 end
