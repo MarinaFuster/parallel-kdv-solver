@@ -4,14 +4,14 @@ clc
 runMetrics = true;
 
 % Normal mode
-order = 4;
-delta_t = 0.01;
+order = 2;
+delta_t = 0.001;
 parallel = true;
 
 % Metrics mode
-repetitions = 10;
+repetitions = 5;
 orders = [2, 4, 6];
-delta_ts = [0.01, 0.001, 0.0001];
+delta_ts = [0.001, 0.005, 0.0001, 0.0005];
 
 N = 256;
 x = linspace(-10,10,N);        % domain, is this ok?
@@ -36,30 +36,32 @@ drawnow
 % METRICS OR NORMAL MODE
 if(runMetrics)
     fileID = fopen('metrics.txt','w');
-    fprintf(fileID,'%s\t%s\t%s\t%s\t%s\n','repetition','time','order', 'parallel', 'delta_t');
-    for rep=1:repetitions
-        parallel = false;
-        for i=1:length(orders)
-           for j=1:length(delta_ts)
+    fprintf(fileID,'%s\t%s\t%s\t%s\t%s\n','time','order', 'parallel', 'delta_t', 'repetition');
+    
+    parallel = false;
+    for i=1:length(orders)
+        for j=1:length(delta_ts)
+           for rep=1:repetitions
                 tic;
                 Approximate(u, x, N, tmax, orders(i), parallel, delta_ts(j));
                 t_series = toc;
 
-                fprintf(fileID,'%d\t%E\t%d\t%s\t%f\n', rep, t_series, orders(i), string(parallel), delta_ts(j));
+                fprintf(fileID,'%E\t%d\t%s\t%f\t%d\n', t_series, orders(i), string(parallel), delta_ts(j), rep);
            end
         end
     end
 
     % this is separated from previous loop in order to start parallel pool
     % only once
-    for rep=1:repetitions
-        parallel = true;
-        for i=1:length(orders)
-            for j=1:length(delta_ts)
+    parallel = true;
+    for i=1:length(orders)
+        for j=1:length(delta_ts)
+            for rep=1:repetitions
                 tic;
                 Approximate(u, x, N, tmax, orders(i), parallel, delta_ts(j));
                 t_parallel = toc;
-                fprintf(fileID,'%d\t%t\t%d\t%s\t%f\n', rep, t_parallel, orders(i), string(parallel), delta_ts(j));
+                
+                fprintf(fileID,'%E\t%d\t%s\t%f\t%d\n', t_parallel, orders(i), string(parallel), delta_ts(j), rep);
             end
         end
     end
