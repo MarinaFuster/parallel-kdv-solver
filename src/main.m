@@ -24,21 +24,23 @@ text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize',10)
 drawnow
 
 % METRICS
+parallel = false;
 for i=1:length(orders)
-    parallel = false;
+   
     tic;
     Approximate(u, x, N, tmax, orders(i), parallel);
     t_series = toc;
     
     fprintf(fileID,'%E\t%d\t%s\n', t_series, orders(i), string(parallel));
-    
-    parallel = true;
+end
+
+parallel = true;
+for i=1:length(orders)
     tic;
     Approximate(u, x, N, tmax, orders(i), parallel);
     t_parallel = toc;
     fprintf(fileID,'%E\t%d\t%s\n', t_parallel, orders(i), string(parallel));
 end
-
 
 fclose(fileID);
 

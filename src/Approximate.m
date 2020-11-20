@@ -5,7 +5,7 @@ function [] = Approximate(u, x, N, tmax, order, parallel)
 
     delta_x = x(2) - x(1);         % x step
     delta_k = 2*pi/(N*delta_x);
-    delta_t = 0.4/N^2;             % TODO why this is like this
+    delta_t = 0.0005;
 
     k = [0:delta_k:(N/2-1)*delta_k,0,-(N/2-1)*delta_k:delta_k:-delta_k];
     plot_iteration = floor((tmax/100)/delta_t);
