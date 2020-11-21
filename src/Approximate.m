@@ -12,6 +12,7 @@ function results = Approximate(u, x, N, tmax, order, parallel, delta_t)
     nmax = round(tmax/delta_t);
     
     U = fft(u);
+    udata = u.'; tdata = 0;
 
     % We now have everything set to start running our approximation method
 
@@ -24,6 +25,7 @@ function results = Approximate(u, x, N, tmax, order, parallel, delta_t)
 
         if mod(n,plot_iteration) == 0
             u = real(ifft(U));
+            udata = [udata u.']; tdata = [tdata t];
             plot(x,u,'LineWidth',1);
             axis([-10 10 0 10]);
             xlabel('x');
@@ -33,4 +35,10 @@ function results = Approximate(u, x, N, tmax, order, parallel, delta_t)
         end
     end
    
+figure
+
+waterfall(x,tdata(1:4:end),udata(:,1:4:end)')
+xlabel x, ylabel t, axis([-10 10 0 tmax 0 10]), grid off
+zlabel u
+
 end

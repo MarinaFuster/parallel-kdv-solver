@@ -1,12 +1,12 @@
 clc
 
 % MODE: normal or metrics
-runMetrics = true;
+runMetrics = false;
 
 % Normal mode
-order = 2;
-delta_t = 0.001;
-parallel = true;
+order = 4;
+delta_t = 0.0005;
+parallel = false;
 
 % Metrics mode
 repetitions = 5;
