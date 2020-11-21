@@ -36,7 +36,7 @@ for i=1:length(orders)
     results_2 = Approximate(u, x, N, tmax, orders(i), parallel, delta_t/2);
     
     for j=1:size(results_1)
-        error{j} = results_1{j}-results_2{j};
+        error{j} = results_1{j}-results_2{2*j - 1}; 
         % To compare step by step
         fprintf(fileID_errors,'%f\n', error{j});
     end
