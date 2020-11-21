@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 # Graficar exactitud vs orden utilizado
 # Probar para ordenes 2, 4, 6 con delta t y delta t/2
-# Hacer 10 corridas y hacer un grafico con barra de error.
-# ESTO SE HACE CON LO DE JIME
+# Hacer 5 corridas y hacer un grafico con barra de error.
+# ESTO SE HACE CON LO DE JIM
 
 
 # Graficar la exactitud del metodo de cuarto orden respecto del delta t utilizado
@@ -13,24 +13,15 @@ import matplotlib.pyplot as plt
 # ESTO SE HACE CON LO DE JIME
 
 
-# Graficar la exactitud en funcion del tiempo
-# tomar los archivos de exactitud para orden 2, 4, 6
-# ESTO SE HACE CON LO DE JIME
-
 
 # Graficar el speed up para orden 2, 4, 6 y luego para orden 50, 60, 80.
 def speed_up_plot():
-    df = pd.read_csv("metrics.csv", delimiter="\t")
+    df = pd.read_csv("./data/metrics.csv", delimiter="\t")
     print(df.head())
 
     orders = np.array(df['order'].drop_duplicates())
-    print(orders)
-
     parallels = df.loc[df['parallel'] == True]
     series = df.loc[df['parallel'] == False]
-
-    print(parallels.head())
-    print(series.head())
 
     speed_ups = []
 
@@ -45,11 +36,45 @@ def speed_up_plot():
         means.append(np.mean(sp_up))
         stds.append(np.std(sp_up))
 
-    print(len(speed_ups))
-    print(len(means))
-    print(len(stds))
+    plt.xlabel("orden")
+    plt.ylabel("speed up")
+    plt.xticks(orders, labels=orders)
+    plt.errorbar(orders, means, stds, linestyle='None', solid_capstyle='projecting', capsize=5, marker='o')
+    plt.savefig("speed_up_orders_2_4_6.png")
 
-    plt.errorbar(orders, means, stds, solid_capstyle='projecting', capsize=5)
-    plt.show()
+def ideal_times_vs_parallel():
+    df = pd.read_csv("./data/metrics.csv", delimiter="\t")
+    print(df.head())
 
-speed_up_plot()
+    orders = np.array(df['order'].drop_duplicates())
+    parallels = df.loc[df['parallel'] == True]
+    series = df.loc[df['parallel'] == False]
+
+    ideals = []
+    reals = []
+
+    for order in orders:
+        ideals.append( \
+            np.array(series.loc[series['order'] == order]['time'])/order)
+        reals.append(
+            np.array(parallels.loc[parallels['order'] == order]['time'])
+        )
+
+    ideals_avg = []
+    reals_avg = []
+
+    for i in range(len(orders)):
+        ideals_avg.append(np.mean(ideals[i]))
+        reals_avg.append(np.mean(reals[i]))
+
+    ax = plt.gca()
+    ax.set_yscale('log')
+    plt.xlabel("orden")
+    plt.ylabel("time [s]")
+    plt.xticks(orders, labels=orders)
+    ideals = plt.scatter(orders, ideals_avg)
+    reals = plt.scatter(orders, reals_avg)
+    plt.legend((ideals, reals), ("Tiempo paralelización ideal", "Tiempo real"))
+    plt.savefig("tiempo_ideal_vs_tiempo_real.png")
+
+accuracy_vs_time()
