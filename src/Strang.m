@@ -1,4 +1,4 @@
-function result = Strang(u, x, N, tmax, order, delta_t)
+function result = Strang(u, x, N, tmax, delta_t)
     label_size = 14;
     delta_x = x(2) - x(1);
     delta_k = 2*pi/(N*delta_x);
