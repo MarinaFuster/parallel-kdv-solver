@@ -9,15 +9,30 @@ import matplotlib.pyplot as plt
 
 # Graficar la exactitud del metodo de cuarto orden respecto del delta t utilizado
 # Probar con orden 4 para 4 delta t distinto.
-# Hacer 10 corridas y hacer un grafico con barra de error
-# ESTO SE HACE CON LO DE JIME
+def accuracy_vs_time():
+    orders = [2, 4, 6]
+    xs = []
+    times = []
+    complete_times = True
 
+    plt.xlabel("tiempo [s]")
+    plt.ylabel("error")
 
+    for order in orders:
+        df = pd.read_csv(f"./data/errors_{order}_0.0001.csv", delimiter="\t")
+        if complete_times:
+            times = np.array(df['delta_t'])
+            complete_times = False
+        errors = np.array(df['error'])
+        xs.append(plt.scatter(times, errors))
+
+    plt.legend((xs[0], xs[1], xs[2]), ("Método Orden 2", "Método Orden 4", "Método Orden 6"))
+    plt.savefig(f"./results/accuracy_vs_time_2_4_6_0.0001.png")
+    plt.clf()
 
 # Graficar el speed up para orden 2, 4, 6 y luego para orden 50, 60, 80.
 def speed_up_plot():
     df = pd.read_csv("./data/metrics.csv", delimiter="\t")
-    print(df.head())
 
     orders = np.array(df['order'].drop_duplicates())
     parallels = df.loc[df['parallel'] == True]
@@ -40,11 +55,11 @@ def speed_up_plot():
     plt.ylabel("speed up")
     plt.xticks(orders, labels=orders)
     plt.errorbar(orders, means, stds, linestyle='None', solid_capstyle='projecting', capsize=5, marker='o')
-    plt.savefig("speed_up_orders_2_4_6.png")
+    plt.savefig("./results/speed_up_orders_2_4_6.png")
+    plt.clf()
 
 def ideal_times_vs_parallel():
     df = pd.read_csv("./data/metrics.csv", delimiter="\t")
-    print(df.head())
 
     orders = np.array(df['order'].drop_duplicates())
     parallels = df.loc[df['parallel'] == True]
@@ -75,6 +90,9 @@ def ideal_times_vs_parallel():
     ideals = plt.scatter(orders, ideals_avg)
     reals = plt.scatter(orders, reals_avg)
     plt.legend((ideals, reals), ("Tiempo paralelización ideal", "Tiempo real"))
-    plt.savefig("tiempo_ideal_vs_tiempo_real.png")
+    plt.savefig("./results/tiempo_ideal_vs_tiempo_real.png")
+    plt.clf()
 
+ideal_times_vs_parallel()
+speed_up_plot()
 accuracy_vs_time()
