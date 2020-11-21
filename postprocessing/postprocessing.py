@@ -17,7 +17,6 @@ def accuracy_vs_time():
 
     plt.xlabel("tiempo [s]")
     plt.ylabel("error")
-
     for order in orders:
         df = pd.read_csv(f"./data/errors_{order}_0.0001.csv", delimiter="\t")
         if complete_times:
@@ -29,6 +28,28 @@ def accuracy_vs_time():
     plt.legend((xs[0], xs[1], xs[2]), ("Método Orden 2", "Método Orden 4", "Método Orden 6"))
     plt.savefig(f"./results/accuracy_vs_time_2_4_6_0.0001.png")
     plt.clf()
+
+
+# Hacer 10 corridas y hacer un grafico con barra de error
+# ESTO SE HACE CON LO DE JIME
+def infinity_norm_over_order():
+    orders = [2, 4, 6]
+    deltaT = 0.0001
+    errors = []
+    for order in orders:
+        df: pd.DataFrame = pd.read_csv(f"./data/errors_{order}_{deltaT}.csv", delimiter="\t")
+        print(df.head())
+        tmp: np.ndarray = np.array(df['error'], dtype=np.float64)
+        tmp = tmp.reshape(len(tmp))
+        errors.append(np.linalg.norm(tmp, np.inf))
+
+    plt.xlabel("orden")
+    plt.ylabel("error")
+    plt.xticks(orders, labels=orders)
+    plt.scatter(orders, errors, marker='o')
+    plt.savefig("data/inf_norm_order_2_4_6.png")
+    plt.clf()
+
 
 # Graficar el speed up para orden 2, 4, 6 y luego para orden 50, 60, 80.
 def speed_up_plot():
@@ -57,6 +78,7 @@ def speed_up_plot():
     plt.errorbar(orders, means, stds, linestyle='None', solid_capstyle='projecting', capsize=5, marker='o')
     plt.savefig("./results/speed_up_orders_2_4_6.png")
     plt.clf()
+
 
 def ideal_times_vs_parallel():
     df = pd.read_csv("./data/metrics.csv", delimiter="\t")
@@ -93,6 +115,9 @@ def ideal_times_vs_parallel():
     plt.savefig("./results/tiempo_ideal_vs_tiempo_real.png")
     plt.clf()
 
-ideal_times_vs_parallel()
-speed_up_plot()
-accuracy_vs_time()
+
+if __name__ == '__main__':
+    ideal_times_vs_parallel()
+    speed_up_plot()
+    accuracy_vs_time()
+    infinity_norm_over_order()
