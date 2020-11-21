@@ -16,30 +16,34 @@ orders = [2, 4, 6];
 delta_t = 0.0001;
 parallel = false;
 
-for i=1:length(orders)
-    for n=1:1
-        tic
-        results_1 = Approximate(u, x, N, tmax, orders(i), parallel, delta_t);
-        time = toc;
-        % Error is calculated in comparisson to delta_t/2
-        results_2 = Approximate(u, x, N, tmax, orders(i), parallel, delta_t/2);
+tic
+results_strang_1 = Strang(u, x, N, tmax, delta_t)
+time = toc
+% for i=1:length(orders)
+%     for n=1:1
+%         tic
+%         results_1 = Approximate(u, x, N, tmax, orders(i), parallel, delta_t);
+%         time = toc;
         
-        disp(size(results_1));
-        disp(size(results_2));
+%         Error is calculated in comparison to delta_t/2
+%         results_2 = Approximate(u, x, N, tmax, orders(i), parallel, delta_t/2);
         
-        for j=1:size(results_1)
-            error{j} = results_2{j}-results_1{2*j};
-        end
+%         disp(size(results_1));
+%         disp(size(results_2));
         
-        disp(size(error));
+%         for j=1:size(results_1)
+%             error{j} = results_2{j}-results_1{2*j};
+%         end
         
-        total_error=cellfun(@(x)norm(x,inf), error);
+%         disp(size(error));
         
-        disp("Order:");
-        disp(orders(i));
-        disp("Error:");
-        disp(total_error);
-        disp("Time:");
-        disp(time);
-    end
-end
+%         total_error=cellfun(@(x)norm(x,inf), error);
+        
+%         disp("Order:");
+%         disp(orders(i));
+%         disp("Error:");
+%         disp(total_error);
+%         disp("Time:");
+%         disp(time);
+%     end
+% end
