@@ -2,7 +2,7 @@ clc
 
 N = 256;
 x = linspace(-10,10,N);        % domain, is this ok?
-tmax =  1.5;
+tmax = 1.5;
 t=0;
 
 % Initial conditions
@@ -28,17 +28,18 @@ fileID_total_errors = fopen('total_errors.txt','w');
 fprintf(fileID_total_errors,'%s\t%s\t%s\n','order','delta_t', 'error');
 
 for i=1:length(orders)
-    fileID_errors = fopen(sprintf('errors_%d_%f.txt', orders(i), delta_t),'w');
-    fprintf(fileID_errors,'%f\n', 'error');
+    %fileID_errors = fopen(sprintf('errors_%d_%f.txt', orders(i), delta_t),'w');
+    %fprintf(fileID_errors,'%f\n', 'error');
     
     results_1 = Approximate(u, x, N, tmax, orders(i), parallel, delta_t);
     % Error is calculated in comparisson to delta_t/2
     results_2 = Approximate(u, x, N, tmax, orders(i), parallel, delta_t/2);
+  
     
     for j=1:size(results_1)
-        error{j} = results_1{j}-results_2{j};
+        error{j} = results_1{j}-results_2{2*j};
         % To compare step by step
-        fprintf(fileID_errors,'%f\n', error{j});
+        %fprintf(fileID_errors,'%f\n', error{j});
     end
     total_error=cellfun(@(x)norm(x,Inf), error);
     fprintf(fileID_total_errors,'%d\t%f\t%f\n', orders(i), delta_t, total_error);
