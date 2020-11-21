@@ -24,6 +24,24 @@ def accuracy_vs_time():
     plt.savefig(f"./results/accuracy_vs_time_2_4_6_0.0001.png")
     plt.clf()
 
+def accuracy_vs_time_different_dt():
+    deltas = ["0.0003", "0.0001", "0.00005", "0.00001"]
+    xs = []
+
+    plt.xlabel("tiempo [s]\n\nMétodo Orden 4")
+    plt.ylabel("error")
+    for delta in deltas:
+        df = pd.read_csv(f"./data/errors_4_{delta}.csv", delimiter="\t")
+        times = np.array(df['delta_t'])
+        errors = np.array(df['error'])
+        xs.append(plt.scatter(times, errors))
+
+    plt.legend((xs[0], xs[1], xs[2], xs[3]), ("h 0.003", "h 0.001", "h 0.0005", "h 0.0001"))
+    plt.savefig(f"./results/accuracy_vs_time_different_deltas.png")
+    plt.clf()
+
+
+
 def accuracy_strang_vs_order_2():
     df = pd.read_csv(f"./data/errors_2_0.0001.csv", delimiter="\t")
     times = np.array(df['delta_t'])
@@ -135,9 +153,10 @@ def ideal_times_vs_parallel():
 
 
 if __name__ == '__main__':
-    ideal_times_vs_parallel()
-    speed_up_plot()
-    accuracy_vs_time()
-    infinity_norm_over_order()
-    accuracy_strang_vs_order_2()
-    strang_infinity_norm()
+    #ideal_times_vs_parallel()
+    #speed_up_plot()
+    #accuracy_vs_time()
+    #infinity_norm_over_order()
+    #accuracy_strang_vs_order_2()
+    #strang_infinity_norm()
+    accuracy_vs_time_different_dt()
