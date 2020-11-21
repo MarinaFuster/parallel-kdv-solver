@@ -20,8 +20,8 @@ drawnow
 
 % Accuracy: Error = |prev_result - curr_result|(inf)
 % Conditions for error calculation
-orders = [6]; % you can set which orders do you want to run
-delta_t = 0.0001;
+orders = [4]; % you can set which orders do you want to run
+delta_t = 0.00001;
 parallel = false;
 fileID_errors = fopen('errors.txt','w');
 fprintf(fileID_errors,'%s\t%s\t%s\n','order','delta_t', 'error');
@@ -36,6 +36,22 @@ for i=1:length(orders)
         fprintf(fileID_errors,'%d\t%f\t%f\n', orders(i), j*delta_t, error{j});
     end
 end
-
 % post processing regarding error and error vs time plots are made in
 % python
+
+fd = fopen('errors_strang.txt', 'w');
+fprintf(fd,'%s\t%s\n','delta_t', 'error');
+
+tic
+results_strang_1 = Strang(u, x, N, tmax, delta_t);
+time= toc
+results_strang_2 = Strang(u, x, N, tmax, delta_t/2);
+
+length(results_strang_1)
+length(results_strang_2)
+
+for j=1: length(results_strang_1)
+    error{j} = mean(abs(results_strang_2{2*j} - results_strang_1{j}));
+    fprintf(fd,'%f\t%f\n', j*delta_t, error{j});
+end
+
