@@ -29,6 +29,21 @@ def accuracy_vs_time():
     plt.savefig(f"./results/accuracy_vs_time_2_4_6_0.0001.png")
     plt.clf()
 
+def accuracy_strang_vs_order_2():
+    df = pd.read_csv(f"./data/errors_2_0.0001.csv", delimiter="\t")
+    times = np.array(df['delta_t'])
+    errors = np.array(df['error'])
+    s_df = pd.read_csv(f"./data/errors_strang_0.0001.csv", delimiter="\t")
+    strang_errors = np.array(s_df['error'])
+
+    plt.xlabel("tiempo [s]")
+    plt.ylabel("error")
+    order_two = plt.scatter(times, errors)
+    strang = plt.scatter(times, strang_errors, linewidths=0)
+
+    plt.legend((order_two, strang), ("Método Orden 2", "Método Strang"))
+    plt.savefig(f"./results/accuracy_strang_vs_order_2_0.0001.png")
+    plt.clf()
 
 # Hacer 10 corridas y hacer un grafico con barra de error
 # ESTO SE HACE CON LO DE JIME
@@ -121,3 +136,4 @@ if __name__ == '__main__':
     speed_up_plot()
     accuracy_vs_time()
     infinity_norm_over_order()
+    accuracy_strang_vs_order_2()
