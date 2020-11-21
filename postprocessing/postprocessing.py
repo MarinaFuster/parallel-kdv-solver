@@ -30,6 +30,27 @@ def accuracy_vs_time():
     plt.clf()
 
 
+def accuracy_vs_time_strang():
+    xs = []
+    times = []
+
+    plt.xlabel("tiempo [s]")
+    plt.ylabel("error")
+    df = pd.read_csv(f"./data/errors_strang_0.0001.csv", delimiter="\t")
+    df2 = pd.read_csv("./data/errors_2_0.0001.csv", delimiter="\t")
+
+    times = np.array(df['delta_t'])
+
+    errors_strang = np.array(df['error'])
+    errors_normal = np.array(df2['error'])
+
+    plt.plot(times, errors_strang, label="Método Strang")
+    plt.plot(times, errors_normal, label="Método Afín Orden 2")
+    plt.legend(loc="upper left")
+    plt.savefig(f"./results/strang_vs_afin_accuracy.png")
+    plt.clf()
+
+
 def infinity_norm_over_order():
     orders = [2, 4, 6]
     deltaT = 0.0001
@@ -39,7 +60,9 @@ def infinity_norm_over_order():
         print(df.head())
         tmp: np.ndarray = np.array(df['error'], dtype=np.float64)
         tmp = tmp.reshape(len(tmp))
-        errors.append(np.linalg.norm(tmp, np.inf))
+        err = np.linalg.norm(tmp, np.inf)
+        errors.append(err)
+        print(f"Order: {order}; Error: {err}")
 
     plt.xlabel("orden")
     plt.ylabel("error")
@@ -125,8 +148,9 @@ def ideal_times_vs_parallel():
 
 
 if __name__ == '__main__':
-    ideal_times_vs_parallel()
-    speed_up_plot()
-    accuracy_vs_time()
-    infinity_norm_over_order()
-    strang_infinity_norm()
+    # ideal_times_vs_parallel()
+    # speed_up_plot()
+    # accuracy_vs_time()
+    # infinity_norm_over_order()
+    #strang_infinity_norm()
+    accuracy_vs_time_strang()
