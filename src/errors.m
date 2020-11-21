@@ -40,3 +40,21 @@ for i=1:length(orders)
     fprintf(fileID_errors,'%d\t%f\t%f\n', orders(i), delta_t, total_error);
     disp(total_error);
 end
+
+fd = fopen('errors_strang.txt', 'w');
+fprintf(fd,'%s\t%s\n','delta_t', 'error');
+
+tic
+results_strang_1 = Strang(u, x, N, tmax, delta_t);
+time= toc
+
+results_strang_2 = Strang(u, x, N, tmax, delta_t/2);
+
+
+for j=1: size(results_strang_1)
+    error{j} = results_strang_2{j} - results_strang_1{2*j}
+end
+
+total_error=cellfun(@(x)norm(x,inf), error);
+
+fprintf(fd, "%f\t%f\n", delta_t, total_error)
