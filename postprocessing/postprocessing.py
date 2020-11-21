@@ -30,8 +30,6 @@ def accuracy_vs_time():
     plt.clf()
 
 
-# Hacer 10 corridas y hacer un grafico con barra de error
-# ESTO SE HACE CON LO DE JIME
 def infinity_norm_over_order():
     orders = [2, 4, 6]
     deltaT = 0.0001
@@ -49,6 +47,16 @@ def infinity_norm_over_order():
     plt.scatter(orders, errors, marker='o')
     plt.savefig("data/inf_norm_order_2_4_6.png")
     plt.clf()
+
+
+def strang_infinity_norm():
+    deltaT = 0.0001
+    errors = []
+
+    df: pd.DataFrame = pd.read_csv(f"./data/errors_strang_{deltaT}.csv", delimiter="\t")
+    print(df.head())
+    tmp: np.ndarray = np.array(df['error'], dtype=np.float64)
+    print(f"Infinity norm: {np.linalg.norm(tmp, np.inf)}")
 
 
 # Graficar el speed up para orden 2, 4, 6 y luego para orden 50, 60, 80.
@@ -121,3 +129,4 @@ if __name__ == '__main__':
     speed_up_plot()
     accuracy_vs_time()
     infinity_norm_over_order()
+    strang_infinity_norm()
