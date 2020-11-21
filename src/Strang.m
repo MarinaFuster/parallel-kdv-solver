@@ -1,10 +1,6 @@
-clear all
-clc
-
 function result = Strang(u, x, N, tmax, order, delta_t)
     label_size = 14;
-
-    x = linspace(xmin,xmax,N); % generate X axis
+    delta_t =    1.0000e-04;
     delta_x = x(2) - x(1);
     delta_k = 2*pi/(N*delta_x);
 
@@ -13,18 +9,17 @@ function result = Strang(u, x, N, tmax, order, delta_t)
 
     %% Draw the initial diagram
     plot(x,u,'LineWidth',2)
-    axis([xmin xmax ymin ymax])
+    axis([-10 10 0 10])
     xlabel('x','FontSize',label_size)
     ylabel('u','FontSize',label_size)
     text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize',label_size )
     drawnow
 
     t_plot = floor((tmax/100)/delta_t);
-    nmax = round(tmax/delta_t);
+    nmax = round(tmax/delta_t)
     udata = u'; tdata = 0;
     U = fft(u);
 
-    tic
     for n = 1:nmax
         t = n*delta_t;
         % linear half step
@@ -33,14 +28,14 @@ function result = Strang(u, x, N, tmax, order, delta_t)
         U = U  - (3i*k*delta_t).*fft((real(ifft(U))).^2);
         % linear half step
         U = U.*exp(1i*k.^3*delta_t/2);
-        result{n} = U
+        result{n} = U;
         if mod(n,t_plot) == 0
             u = real(ifft(U));
             udata = [udata u']; tdata = [tdata t];
             % Only plot specific times
             if mod(n,4*t_plot) == 0
                 plot(x,u,'LineWidth',2)
-                axis([xmin xmax ymin ymax])
+                axis([-10 10 0 10])
                 xlabel('x', 'FontSize',label_size)
                 ylabel('u', 'FontSize',label_size)
                 text(6,9,['t = ',num2str(t,'%1.2f')],'FontSize', label_size)
@@ -48,4 +43,3 @@ function result = Strang(u, x, N, tmax, order, delta_t)
             end
         end
     end
-    toc
