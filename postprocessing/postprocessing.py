@@ -1,11 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-# Graficar exactitud vs orden utilizado
-# Probar para ordenes 2, 4, 6 con delta t y delta t/2
-# Hacer 5 corridas y hacer un grafico con barra de error.
-# ESTO SE HACE CON LO DE JIM
-
 
 # Graficar la exactitud del metodo de cuarto orden respecto del delta t utilizado
 # Probar con orden 4 para 4 delta t distinto.
@@ -45,8 +40,6 @@ def accuracy_strang_vs_order_2():
     plt.savefig(f"./results/accuracy_strang_vs_order_2_0.0001.png")
     plt.clf()
 
-# Hacer 10 corridas y hacer un grafico con barra de error
-# ESTO SE HACE CON LO DE JIME
 def infinity_norm_over_order():
     orders = [2, 4, 6]
     deltaT = 0.0001
@@ -64,6 +57,16 @@ def infinity_norm_over_order():
     plt.scatter(orders, errors, marker='o')
     plt.savefig("data/inf_norm_order_2_4_6.png")
     plt.clf()
+
+
+def strang_infinity_norm():
+    deltaT = 0.0001
+    errors = []
+
+    df: pd.DataFrame = pd.read_csv(f"./data/errors_strang_{deltaT}.csv", delimiter="\t")
+    print(df.head())
+    tmp: np.ndarray = np.array(df['error'], dtype=np.float64)
+    print(f"Infinity norm: {np.linalg.norm(tmp, np.inf)}")
 
 
 # Graficar el speed up para orden 2, 4, 6 y luego para orden 50, 60, 80.
@@ -137,3 +140,4 @@ if __name__ == '__main__':
     accuracy_vs_time()
     infinity_norm_over_order()
     accuracy_strang_vs_order_2()
+    strang_infinity_norm()
